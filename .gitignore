@@ -206,3 +206,12 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 *.xls;xlsx;csv
+
+
+# Files to analyze
+*.xls
+*.xlsx
+
+
+# Result of analyzing
+*.png

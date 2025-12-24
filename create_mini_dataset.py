@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 
+
 def create_mini_dataset(input_file, output_file, num_rows=1000):
     """
     Creates a smaller version of an Excel file.
@@ -25,11 +26,11 @@ def create_mini_dataset(input_file, output_file, num_rows=1000):
     except Exception as e:
         print(f"An error occurred: {e}")
 
+
 if __name__ == "__main__":
     # Use absolute paths
     workspace_dir = os.path.dirname(os.path.abspath(__file__))
-    input_path = os.path.join(workspace_dir, 'gtd.xlsx')
-    output_path = os.path.join(workspace_dir, 'gtd-mini.xlsx')
+    input_path = os.path.join(workspace_dir, "gtd.xlsx")
+    output_path = os.path.join(workspace_dir, "gtd-mini.xlsx")
 
     create_mini_dataset(input_path, output_path, num_rows=1000)
-
