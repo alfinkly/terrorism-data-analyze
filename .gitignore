@@ -215,3 +215,4 @@ __marimo__/
 
 # Result of analyzing
 *.png
+.idea/
