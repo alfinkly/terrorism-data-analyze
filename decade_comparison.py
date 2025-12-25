@@ -210,7 +210,7 @@ def analyze_weapon_evolution(df):
     plt.legend(title="Weapon Type", bbox_to_anchor=(1.05, 1), loc="upper left")
     plt.xticks(rotation=0)
     plt.tight_layout()
-    plt.savefig("weapon_evolution.png", dpi=150)
+    plt.savefig("attachments/weapon_evolution.png", dpi=150)
     plt.show()
     print("Saved: weapon_evolution.png")
 
@@ -243,20 +243,45 @@ def analyze_target_evolution(df):
     plt.legend(title="Target Type", bbox_to_anchor=(1.05, 1), loc="upper left")
     plt.grid(True, alpha=0.3)
     plt.tight_layout()
-    plt.savefig("target_evolution.png", dpi=150)
+    plt.savefig("attachments/target_evolution.png", dpi=150)
     plt.show()
     print("Saved: target_evolution.png")
 
 
-if __name__ == "__main__":
+def run_analysis():
+    """Main function to run the entire analysis pipeline."""
     df = load_data()
-    if df is not None:
-        df = prepare_data(df)
+    if df is None:
+        return
 
-        analyze_decade_overview(df)
-        plot_decade_attacks(df)
-        plot_decade_casualties(df)
-        analyze_attack_type_evolution(df)
-        analyze_regional_shift(df)
-        analyze_weapon_evolution(df)
-        analyze_target_evolution(df)
+    # Prepare data
+    df_clean = prepare_data(df)
+
+    # --- Decade Overview ---
+    analyze_decade_overview(df_clean)
+
+    # --- Overall Trend Comparison ---
+    print("--- Comparing Overall Attack Trends Across Decades ---")
+    plot_decade_attacks(df_clean)
+
+    # --- Regional Shift Analysis ---
+    print("\n--- Analyzing Regional Shifts in Terrorism Across Decades ---")
+    analyze_regional_shift(df_clean)
+
+    # --- Tactical Evolution Analysis ---
+    print("\n--- Analyzing Evolution of Attack Types Across Decades ---")
+    analyze_attack_type_evolution(df_clean)
+
+    # --- Weapon Preference Analysis ---
+    print("\n--- Analyzing Evolution of Weapon Types Across Decades ---")
+    analyze_weapon_evolution(df_clean)
+
+    # --- Target Preference Analysis ---
+    print("\n--- Analyzing Evolution of Target Types Across Decades ---")
+    analyze_target_evolution(df_clean)
+
+    print("\nDecade comparison analysis complete. Plots saved to 'attachments' directory.")
+
+
+if __name__ == "__main__":
+    run_analysis()

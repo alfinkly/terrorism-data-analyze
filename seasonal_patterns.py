@@ -243,7 +243,7 @@ def analyze_heatmap_month_year(df):
     plt.ylabel("Year")
     plt.title("Terrorist Attacks Heatmap (1990-Present)")
     plt.tight_layout()
-    plt.savefig("attacks_heatmap.png", dpi=150)
+    plt.savefig("attachments/attacks_heatmap.png", dpi=150)
     plt.show()
     print("Saved: attacks_heatmap.png")
 
@@ -269,7 +269,7 @@ def analyze_day_patterns(df):
     plt.xticks(range(1, 32))
     plt.legend()
     plt.tight_layout()
-    plt.savefig("daily_patterns.png", dpi=150)
+    plt.savefig("attachments/daily_patterns.png", dpi=150)
     plt.show()
     print("Saved: daily_patterns.png")
 
@@ -285,13 +285,32 @@ def analyze_day_patterns(df):
     )
 
 
-if __name__ == "__main__":
+def run_analysis():
+    """Main function to run the entire analysis pipeline."""
     df = load_data()
-    if df is not None:
-        df = prepare_data(df)
+    if df is None:
+        return
 
-        analyze_monthly_patterns(df)
-        analyze_seasonal_patterns(df)
-        analyze_regional_seasonal_patterns(df)
-        analyze_heatmap_month_year(df)
-        analyze_day_patterns(df)
+    # Prepare data
+    df_clean = prepare_data(df)
+
+    # --- Monthly and Quarterly Analysis ---
+    analyze_monthly_patterns(df_clean)
+
+    # --- Day of the Week Analysis ---
+    analyze_day_patterns(df_clean)
+
+    # --- Seasonal Analysis (Meteorological Seasons) ---
+    analyze_seasonal_patterns(df_clean)
+
+    # --- Heatmap of Year vs. Month ---
+    analyze_heatmap_month_year(df_clean)
+
+    # --- Regional Seasonal Analysis ---
+    analyze_regional_seasonal_patterns(df_clean)
+
+    print("\nSeasonal patterns analysis complete. Plots saved to 'attachments' directory.")
+
+
+if __name__ == "__main__":
+    run_analysis()

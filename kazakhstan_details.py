@@ -36,7 +36,7 @@ def analyze_kazakhstan_weapon_types(df):
     plt.xlabel("Number of Incidents")
     plt.ylabel("Weapon Type")
     plt.tight_layout()
-    plt.savefig("kazakhstan_weapon_types.png")
+    plt.savefig("attachments/kazakhstan_weapon_types.png")
     plt.show()
 
     # Print the top 3 weapon types
@@ -66,7 +66,7 @@ def analyze_kazakhstan_terrorist_groups(df):
     plt.xlabel("Number of Attacks")
     plt.ylabel("Group")
     plt.tight_layout()
-    plt.savefig("kazakhstan_terrorist_groups.png")
+    plt.savefig("attachments/kazakhstan_terrorist_groups.png")
     plt.show()
 
     # Print the top 3 groups
@@ -75,31 +75,51 @@ def analyze_kazakhstan_terrorist_groups(df):
     print(top_groups)
 
 
-if __name__ == "__main__":
-    file_to_use = "gtd.xlsx"
-    gtd_df = load_data(file_to_use)
+def run_analysis():
+    """
+    Main function to run the detailed analysis for Kazakhstan.
+    """
+    file_path = "gtd.xlsx"
+    df = load_data(file_path)
 
-    if gtd_df is not None:
-        gtd_df.rename(
+    if df is not None:
+        # Rename columns for consistency
+        df.rename(
             columns={
                 "iyear": "Year",
                 "imonth": "Month",
                 "iday": "Day",
                 "country_txt": "Country",
-                "provstate": "state",
                 "region_txt": "Region",
                 "attacktype1_txt": "AttackType",
                 "target1": "Target",
                 "nkill": "Killed",
                 "nwound": "Wounded",
-                "summary": "Summary",
                 "gname": "Group",
                 "targtype1_txt": "Target_type",
                 "weaptype1_txt": "Weapon_type",
-                "motive": "Motive",
+                "city": "City",
             },
             inplace=True,
         )
+        # Filter data for Kazakhstan
+        df_kazakhstan = df[df["Country"] == "Kazakhstan"].copy()
 
-        analyze_kazakhstan_weapon_types(gtd_df)
-        analyze_kazakhstan_terrorist_groups(gtd_df)
+        if df_kazakhstan.empty:
+            print("No data found for Kazakhstan in the dataset.")
+            return
+
+        print(f"Found {len(df_kazakhstan)} total records for Kazakhstan.")
+
+        # --- Analyze Weapon Types ---
+        analyze_kazakhstan_weapon_types(df_kazakhstan)
+
+
+        # --- Analyze Terrorist Groups ---
+        analyze_kazakhstan_terrorist_groups(df_kazakhstan)
+
+        print("\nDetailed analysis for Kazakhstan complete. Plots saved to 'attachments' directory.")
+
+
+if __name__ == "__main__":
+    run_analysis()

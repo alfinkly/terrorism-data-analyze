@@ -148,7 +148,7 @@ def analyze_success_trends(df):
     plt.legend()
     plt.grid(True, alpha=0.3)
     plt.tight_layout()
-    plt.savefig("success_trends.png", dpi=150)
+    plt.savefig("attachments/success_trends.png", dpi=150)
     plt.show()
     print("Saved: success_trends.png")
 
@@ -171,18 +171,38 @@ def analyze_top_groups_success(df, min_attacks=50):
     plt.title(f"Success Rate of Major Terrorist Groups (min {min_attacks} attacks)")
     plt.xlim(0, 100)
     plt.tight_layout()
-    plt.savefig("success_by_group.png", dpi=150)
+    plt.savefig("attachments/success_by_group.png", dpi=150)
     plt.show()
     print("Saved: success_by_group.png")
 
 
-if __name__ == "__main__":
+def run_analysis():
+    """Main function to run the entire analysis pipeline."""
     df = load_data()
-    if df is not None:
-        df = prepare_data(df)
+    if df is None:
+        return
 
-        analyze_success_by_attack_type(df)
-        analyze_success_by_region(df)
-        analyze_success_by_weapon(df)
-        analyze_success_trends(df)
-        analyze_top_groups_success(df)
+    # Prepare data
+    df_clean = prepare_data(df)
+
+    # --- Analysis by Attack Type ---
+    analyze_success_by_attack_type(df_clean)
+
+    # --- Analysis by Region ---
+    analyze_success_by_region(df_clean)
+
+    # --- Analysis by Weapon Type ---
+    analyze_success_by_weapon(df_clean)
+
+    # --- Analysis by Top Terrorist Groups ---
+    analyze_top_groups_success(df_clean)
+
+    # --- Temporal Analysis of Success Rates ---
+    analyze_success_trends(df_clean)
+
+    print("\nSuccess rate analysis complete. Plots saved to 'attachments' directory.")
+
+
+if __name__ == "__main__":
+    run_analysis()
+

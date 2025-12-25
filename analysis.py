@@ -54,11 +54,11 @@ def plot_attacks_over_time_comparison(df):
     plt.ylabel("Number of Attacks")
     plt.legend()
     plt.grid(True)
-    plt.savefig("attacks_over_time_comparison.png")
+    plt.savefig("attachments/attacks_over_time_comparison.png")
     plt.show()
 
 
-if __name__ == "__main__":
+def run_analysis():
     # For development, use the smaller dataset
     # file_to_use = 'gtd-mini.xlsx'
     # For final analysis, you would switch to 'gtd.xlsx'
@@ -95,3 +95,7 @@ if __name__ == "__main__":
 
         # Now, let's do the time-series comparison
         plot_attacks_over_time_comparison(gtd_df)
+
+
+if __name__ == "__main__":
+    run_analysis()

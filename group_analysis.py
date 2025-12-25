@@ -87,7 +87,7 @@ def analyze_most_active_groups(df, top_n=20):
     plt.title(f"Top {top_n} Most Active Terrorist Groups")
     plt.gca().invert_yaxis()
     plt.tight_layout()
-    plt.savefig("most_active_groups.png", dpi=150)
+    plt.savefig("attachments/most_active_groups.png", dpi=150)
     plt.show()
     print("Saved: most_active_groups.png")
 
@@ -219,7 +219,7 @@ def analyze_group_geographic_spread(df, top_n=15):
     ax.legend()
     ax.invert_yaxis()
     plt.tight_layout()
-    plt.savefig("group_geographic_spread.png", dpi=150)
+    plt.savefig("attachments/group_geographic_spread.png", dpi=150)
     plt.show()
     print("Saved: group_geographic_spread.png")
 
@@ -255,7 +255,7 @@ def analyze_central_asia_groups(df):
     plt.title("Terrorist Groups in Central Asia")
     plt.gca().invert_yaxis()
     plt.tight_layout()
-    plt.savefig("central_asia_groups.png", dpi=150)
+    plt.savefig("attachments/central_asia_groups.png", dpi=150)
     plt.show()
     print("Saved: central_asia_groups.png")
 
@@ -266,14 +266,42 @@ def analyze_central_asia_groups(df):
         print(f"{group}: {int(row['Attacks'])} attacks, {int(row['Killed'])} killed")
 
 
-if __name__ == "__main__":
+def run_analysis():
+    """Main function to run the entire analysis pipeline."""
     df = load_data()
-    if df is not None:
-        df = prepare_data(df)
+    if df is None:
+        return
 
-        analyze_most_active_groups(df)
-        analyze_group_activity_timeline(df)
-        analyze_group_methods(df)
-        analyze_group_targets(df)
-        analyze_group_geographic_spread(df)
-        analyze_central_asia_groups(df)
+    # Prepare data
+    df_clean = prepare_data(df)
+
+    # --- Overall Group Activity ---
+    print("--- Analyzing Overall Terrorist Group Activity ---")
+    analyze_most_active_groups(df_clean, top_n=20)
+
+    # --- Temporal Analysis of Top Groups ---
+    print("\n--- Analyzing Temporal Trends of Top 5 Groups ---")
+    analyze_group_activity_timeline(df_clean)
+
+    # --- Tactical Analysis of Top Groups ---
+    print("\n--- Analyzing Tactics of Top 10 Groups ---")
+    analyze_group_methods(df_clean, top_n=10)
+
+    # --- Geographical Footprint of Top Groups ---
+    print("\n--- Analyzing Geographical Footprint of Top 15 Groups ---")
+    analyze_group_geographic_spread(df_clean, top_n=15)
+
+    # --- Target Analysis ---
+    print("\n--- Analyzing Targets of Top 10 Groups ---")
+    analyze_group_targets(df_clean, top_n=10)
+
+    # --- Central Asia Analysis ---
+    print("\n--- Analyzing Groups in Central Asia ---")
+    analyze_central_asia_groups(df_clean)
+
+    print("\nGroup analysis complete. Plots saved to 'attachments' directory.")
+
+
+if __name__ == "__main__":
+    run_analysis()
+

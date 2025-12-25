@@ -173,7 +173,7 @@ def plot_deadliest_groups(df, top_n=15):
     plt.legend()
     plt.gca().invert_yaxis()
     plt.tight_layout()
-    plt.savefig("deadliest_groups.png", dpi=150)
+    plt.savefig("attachments/deadliest_groups.png", dpi=150)
     plt.show()
     print("Saved: deadliest_groups.png")
 
@@ -248,17 +248,38 @@ def analyze_lethality_trends(df):
     ax2.grid(True, alpha=0.3)
 
     plt.tight_layout()
-    plt.savefig("lethality_trends.png", dpi=150)
+    plt.savefig("attachments/lethality_trends.png", dpi=150)
     plt.show()
     print("Saved: lethality_trends.png")
 
 
-if __name__ == "__main__":
+def run_analysis():
+    """Main function to run the entire analysis pipeline."""
     df = load_data()
-    if df is not None:
-        df = prepare_data(df)
+    if df is None:
+        return
 
-        analyze_deadliest_attacks(df)
-        plot_deadliest_by_region(df)
-        plot_deadliest_groups(df)
-        analyze_lethality_trends(df)
+    # Prepare data
+    df_clean = prepare_data(df)
+
+    # --- Global Analysis ---
+    print("--- Analyzing Top 20 Deadliest Attacks Globally ---")
+    analyze_deadliest_attacks(df_clean, top_n=20)
+
+    # --- Regional Analysis ---
+    print("\n--- Analyzing Deadliest Attacks per Region ---")
+    plot_deadliest_by_region(df_clean)
+
+    # --- Group Analysis ---
+    print("\n--- Analyzing Deadliest Groups ---")
+    plot_deadliest_groups(df_clean)
+
+    # --- Analysis of High-Casualty Attacks ---
+    print("\n--- Analyzing Characteristics of High-Casualty Attacks ---")
+    analyze_lethality_trends(df_clean)
+
+    print("\nDeadliest attacks analysis complete. Plots saved to 'attachments' directory.")
+
+
+if __name__ == "__main__":
+    run_analysis()

@@ -84,55 +84,65 @@ def analyze_kazakhstan_data(df):
     plt.xlabel("Number of Attacks")
     plt.ylabel("City")
     plt.tight_layout()
-    plt.savefig("kazakhstan_attacks_by_city.png")
+    plt.savefig("attachments/kazakhstan_attacks_by_city.png")
     plt.show()
 
 
-if __name__ == "__main__":
-    file_to_use = "gtd.xlsx"
-    gtd_df = load_data(file_to_use)
+def run_analysis():
+    """
+    Main function to run the Kazakhstan rankings analysis.
+    """
+    file_path = "gtd.xlsx"
+    df = load_data(file_path)
 
-    if gtd_df is not None:
-        gtd_df.rename(
+    if df is not None:
+        # Rename columns for consistency
+        df.rename(
             columns={
                 "iyear": "Year",
                 "imonth": "Month",
                 "iday": "Day",
                 "country_txt": "Country",
-                "provstate": "state",
                 "region_txt": "Region",
                 "attacktype1_txt": "AttackType",
                 "target1": "Target",
                 "nkill": "Killed",
                 "nwound": "Wounded",
-                "summary": "Summary",
                 "gname": "Group",
                 "targtype1_txt": "Target_type",
                 "weaptype1_txt": "Weapon_type",
-                "motive": "Motive",
+                "city": "City",
             },
             inplace=True,
         )
 
-        # Rank countries by number of attacks
-        attack_ranking = rank_countries_by_metric(gtd_df, "Attacks")
-        print("--- Top 10 Countries by Number of Attacks ---")
-        print(attack_ranking.head(10))
-        kaz_attack_rank = attack_ranking[attack_ranking["Country"] == "Kazakhstan"]
-        if not kaz_attack_rank.empty:
-            print(f"\nKazakhstan's Rank (Attacks): {kaz_attack_rank.index[0] + 1}")
+        # --- Rank by Number of Attacks ---
+        print("--- Ranking Countries by Number of Attacks ---")
+        attacks_rank_df = rank_countries_by_metric(df, "Attacks")
+        # find_and_display_kazakhstan_rank(attacks_rank_df, "Rank by Attacks", "Number of Attacks")
+        # plot_top_countries(
+        #     attacks_rank_df,
+        #     "Number of Attacks",
+        #     "Top 20 Countries by Number of Terrorist Attacks",
+        #     "attachments/top_20_countries_by_attacks.png",
+        # )
 
-        # Rank countries by casualties
-        casualties_ranking = rank_countries_by_metric(gtd_df, "Casualties")
-        print("\n--- Top 10 Countries by Casualties (Killed + Wounded) ---")
-        print(casualties_ranking.head(10))
-        kaz_casualties_rank = casualties_ranking[
-            casualties_ranking["Country"] == "Kazakhstan"
-        ]
-        if not kaz_casualties_rank.empty:
-            print(
-                f"\nKazakhstan's Rank (Casualties): {kaz_casualties_rank.index[0] + 1}"
-            )
+        # --- Rank by Total Casualties ---
+        print("\n--- Ranking Countries by Total Casualties ---")
+        casualties_rank_df = rank_countries_by_metric(df, "Casualties")
+        # find_and_display_kazakhstan_rank(casualties_rank_df, "Rank by Casualties", "Total Casualties")
+        # plot_top_countries(
+        #     casualties_rank_df,
+        #     "Total Casualties",
+        #     "Top 20 Countries by Total Casualties from Terrorism",
+        #     "attachments/top_20_countries_by_casualties.png",
+        # )
 
-        # Detailed analysis for Kazakhstan
-        analyze_kazakhstan_data(gtd_df)
+        # --- Detailed analysis for Kazakhstan ---
+        analyze_kazakhstan_data(df)
+
+        print("\nAnalysis complete. Plots and rankings have been generated.")
+
+
+if __name__ == "__main__":
+    run_analysis()
